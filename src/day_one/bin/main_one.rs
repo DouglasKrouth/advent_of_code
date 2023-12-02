@@ -3,24 +3,33 @@ use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 
+// https://adventofcode.com/2023/day/1
 
 fn main() {
     let re = Regex::new(r"\d{1}").unwrap();
-    let mut sum: i32 = 0;
     // Filename must exist in the current path
-    if let Ok(lines) = read_lines("./data/example_1_data.txt") {
+    if let Ok(lines) = read_lines("./data/puzzle_1_data.txt") {
         // Consumes the iterator, returns an (Optional) String
         let mut line_num: i32 = 0;
+        let mut sum: i32 = 0;
         for line in lines {
-            println!("\n---\nLine {line_num}\n---");
+            println!("---\nLine {line_num}\n---");
             line_num += 1;
             if let Ok(ip) = line {
                 let result: Vec<_> = re.find_iter(&ip).map(|m| m.as_str()).collect();
-                let first = result.first().unwrap();
-                let last = result.last().unwrap();
-                println!("First int : {:?}\nLast int : {:?} ", first, last);
+                let f = result.first().unwrap().to_owned();
+                // last() will catch edge case where we only have a single value in our array
+                let l = result.last().unwrap().to_owned();
+                // Combine first/last as a string repr
+                let number: i32 = [f, l].join("").parse().unwrap();
+                println!(
+                    "First int : {:?}, Last int : {:?}, combined value : {:?}\n---",
+                    f, l, number
+                );
+                sum += number;
             }
         }
+        println!("Final sum = {}", sum);
     }
 }
 

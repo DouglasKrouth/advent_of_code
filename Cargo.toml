@@ -4,8 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "day_one"
-path = "src/day_one/bin/main.rs"
+name = "day_one_one"
+path = "src/day_one/bin/main_one.rs"
+
+[[bin]]
+name = "day_one_two"
+path = "src/day_one/bin/main_two.rs"
 
 [[bin]]
 name = "day_two"
@@ -15,3 +19,4 @@ path = "src/day_two/bin/main.rs"
 regex = "1.10.2"
 log = "0.4.20"
 env_logger = "0.7.1"
+aho-corasick = "1.1.2"
