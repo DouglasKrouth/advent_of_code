@@ -31,30 +31,31 @@ def solve(path: str) -> int:
         # Each line represents a "game"; ind. hands in a game are delineated by semicolons
         games = []
         for line in f:
-            game_number = int(re.search(r"(?P<game_number>Game \d+)", line).group("game_number").strip("Game "))
+            print("\n{}".format(line))
             valid_game = True
-            if game_number == 1:
-                print("---")
-            print("Game {}".format(game_number))
+            game_number = int(re.search(r"(?P<gn>Game \d+)", line).group("gn").replace("Game ", ""))
             # trim string for each hand, split the hand into a list by semicolon, trim whitespace
             hands = [
                 h.strip()
-                for h in re.sub("Game \d+\:\s", "", line).replace("\n", "").split(";")
+                for h in re.sub(r"Game \d+\:\s", "", line).replace("\n", "").split(";")
             ]
             # Now apply a split for each of the hands in a game
             for i in hands:
                 # split each hand into ind. marble counts, trim to remove remaining whitespace
                 temp = [j.strip() for j in i.split(",")]
                 unvalidated_hand = make_hand(temp)
-                print(unvalidated_hand)
                 if check_hand_validity(unvalidated_hand) == False:
                     valid_game = False
-                    print(unvalidated_hand, "yields an invalid game!")
+                    print("Invalid game! {}".format(unvalidated_hand))
                     break
+                else:
+                    print(unvalidated_hand)
+            print("---")
 
             if valid_game == True:
                 sum_of_game_ids += game_number
-    
+
+    print(NUMBER_OF_CUBES)
     return sum_of_game_ids
 
 def check_hand_validity(h: Hand) -> bool:
@@ -69,7 +70,7 @@ def check_hand_validity(h: Hand) -> bool:
     global NUMBER_OF_CUBES
     valid = True
     for i in NUMBER_OF_CUBES.keys():
-        if getattr(h, i) >= NUMBER_OF_CUBES.get(i):
+        if getattr(h, i) > NUMBER_OF_CUBES.get(i):
             valid = False
     return valid
 
